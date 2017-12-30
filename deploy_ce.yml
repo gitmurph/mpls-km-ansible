@@ -1,0 +1,11 @@
+---
+
+- hosts: ce
+
+  connection: local
+  gather_facts: 'no'
+
+  roles:
+    - snmp
+    - interfaces
+    - cerouting        

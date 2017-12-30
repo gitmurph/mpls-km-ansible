@@ -1,0 +1,7 @@
+---
+
+- name: write vrf config
+  ios_config:
+    authorize: yes
+    src: "templates/vrf.j2"
+    provider: "{{ ios_provider }}"

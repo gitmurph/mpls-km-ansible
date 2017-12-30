@@ -1,0 +1,21 @@
+---
+
+- name: write interfaces config
+  ios_config:
+    authorize: yes
+    src: "templates/interfaces.j2"
+    provider: "{{ ios_provider }}"
+
+- name: no shut physical interfaces
+  ios_config:
+    authorize: yes
+    lines:
+      - no ip address
+      - duplex auto
+      - speed auto
+    after:
+      - no shut
+    parents: "interface GigabitEthernet0/1"
+    match: exact
+    provider: "{{ ios_provider }}"
+

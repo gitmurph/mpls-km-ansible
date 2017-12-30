@@ -1,0 +1,50 @@
+{% if ospf is defined %}
+router ospf {{ ospf.proc }}
+ router-id {{ peloopback.address }}
+{% endif %}
+{% for item in ospf.networks %}
+ network {{ item.network }} {{ item.mask }} area {{ item.area }}
+ {{ ospf.ldp }}
+{% endfor %}
+{% if bgp is defined %}
+router bgp {{ bgp.asn }}
+ bgp router-id {{ peloopback.address }}
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+{% for item in bgp.neighbor %}
+ neighbor {{ item.address }} remote-as {{ item.remote_as }}
+{% endfor %}
+{% for item in bgp.ups %}
+ neighbor {{ item.address }} update-source {{ item.loopback }}
+{% endfor %} 
+ !
+ address-family ipv4
+ exit-address-family
+{% for item in bgp.vpnv4 %} 
+ address-family vpnv4
+  neighbor {{ item.address }} activate
+ exit-address-family
+{% endfor %}
+{% if rrc is defined %}
+{% for item in bgp.vpnv4 %}
+ address-family vpnv4
+  neighbor {{ item.address }} activate
+  neighbor {{ item.address }} send-community extended
+{% endfor %}
+{% for item in rrc.client %}
+  neighbor {{ item.address }} {{ item.policy }}
+{% endfor %}
+{% endif %}
+{% if policy is defined %}
+{% for item in bgp.ipv4 %}
+ address-family ipv4 vrf {{ item.cvrf }}
+  neighbor {{ item.ce }} remote-as {{ item.remote_as }}
+  neighbor {{ item.ce }} activate
+{% endfor %}
+{% for item in policy.outbound %}
+  neighbor {{ item.ce }} {{ item.asover}}
+ exit-address-family
+{% endfor %}
+{% endif %}
+{% endif %}
+

@@ -1,0 +1,67 @@
+---
+
+hostname: p2
+domain_name: emea.com
+
+peloopback:
+  address: 10.255.0.200
+  mask: 255.255.255.255
+
+
+interfaces:
+  0/1.56:
+    alias: connection pe-brussels
+    vlan: 56
+    address: 10.0.252.2
+    mask: 255.255.255.252
+
+  0/1.78:
+    alias: connection pe-london
+    vlan: 78
+    address: 10.0.253.2
+    mask: 255.255.255.252
+
+
+  0/1.122:
+    alias: connection p1
+    vlan: 122
+    address: 10.0.122.2
+    mask: 255.255.255.252
+
+
+ospf:
+   proc: 1
+   ldp: mpls ldp autoconfig
+   networks:
+    - {network: 0.0.0.0, mask: 255.255.255.255, area: 0}
+
+
+bgp:
+  asn: 1
+  neighbor:
+    - {address: 10.255.0.1, remote_as: 1}
+    - {address: 10.255.0.2, remote_as: 1}
+    - {address: 10.255.0.3, remote_as: 1}
+    - {address: 10.255.0.4, remote_as: 1}
+  ups:
+    - {address: 10.255.0.1, loopback: lo0}
+    - {address: 10.255.0.2, loopback: lo0}
+    - {address: 10.255.0.3, loopback: lo0}
+    - {address: 10.255.0.4, loopback: lo0}
+
+  vpnv4:
+    - {address: 10.255.0.1}
+    - {address: 10.255.0.2}
+    - {address: 10.255.0.3}
+    - {address: 10.255.0.4}
+
+
+rrc:
+  client:
+    - {address: 10.255.0.1, policy: route-reflector-client}
+    - {address: 10.255.0.2, policy: route-reflector-client}
+    - {address: 10.255.0.3, policy: route-reflector-client}
+    - {address: 10.255.0.4, policy: route-reflector-client}
+
+
+

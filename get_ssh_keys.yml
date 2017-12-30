@@ -1,0 +1,48 @@
+#!/usr/bin/env ansible-playbook
+#
+# Get SSH keys from lab devices described in Ansible inventory
+#
+- name: Get SSH keys
+  hosts: all
+  gather_facts: no
+  connection: local
+  vars:
+    - known_hosts: "~/.ssh/known_hosts"
+  tasks:
+    - name: scan and register
+      command: "ssh-keyscan -p {{ansible_port|default(22)}} {{ansible_host|default(inventory_hostname)}}"
+      register: "host_keys"
+      changed_when: false
+
+    - assert:
+        that: host_keys.stdout
+        msg:  "We did not get SSH key for {{inventory_hostname}}"
+
+    - name: Stat known_hosts file for existance
+      stat: path="{{ known_hosts }}"
+      register: fstat
+      run_once: true
+      
+    - name: Create known_hosts file if non-existing
+      # Creating same using 'touch' has the underisable effect of any non-ansible key additions (using ssh cmd) to file being appended to 
+      # ansible managed code block without a new line, rendering the ansible block non-unique between playbook runs and quite wasted.
+      copy: content="\n" dest="{{ known_hosts }}"
+      when: "not fstat.stat.exists"
+      run_once: true
+      changed_when: false
+
+    - blockinfile:
+        dest: "{{known_hosts}}"
+        marker: "# {mark} This part managed by Ansible"
+        block: |
+          {% for h in groups['all'] if hostvars[h].host_keys is defined %}
+          {%  if hostvars[h].ansible_port is defined %}
+          {%   for key in hostvars[h].host_keys.stdout_lines %}
+          [{{ key.partition(" ")[0] }}]:{{ hostvars[h].ansible_port }} {{ key.partition(" ")[2] }}
+          {%   endfor %}
+          {%  else %}
+          {{ hostvars[h].host_keys.stdout }}
+          {%  endif %}
+          {% endfor %}
+      run_once: true
+      delegate_to: localhost

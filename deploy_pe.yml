@@ -1,0 +1,12 @@
+---
+
+- hosts: pe
+
+  connection: local
+  gather_facts: 'no'
+
+  roles:
+    - vrf
+    - interfaces
+    - perouting
+    

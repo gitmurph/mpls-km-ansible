@@ -1,0 +1,7 @@
+---
+
+- name: set dns and hostname
+  ios_system:
+    hostname: "{{ hostname }}"
+    domain_name: "{{ domain_name }}"
+    lookup_enabled: 'no'

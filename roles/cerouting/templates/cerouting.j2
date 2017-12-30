@@ -1,0 +1,10 @@
+{% if bgp is defined %}
+router bgp {{ bgp.asn }}
+ bgp log-neighbor-changes
+{% for item in bgp.neighbor %}
+ neighbor {{ item.address }} remote-as {{ item.remote_as }}
+ redistribute connected
+{% endfor %}
+{% endif %}
+
+

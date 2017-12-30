@@ -1,0 +1,7 @@
+---
+
+- name: write routing config
+  ios_config:
+    authorize: yes
+    src: "../templates/cerouting.j2"
+    provider: "{{ ios_provider }}"

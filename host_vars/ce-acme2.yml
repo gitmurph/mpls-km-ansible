@@ -1,0 +1,21 @@
+---
+
+hostname: ce-acme2
+domain_name: emea.com
+
+celoopback:
+  address: 172.2.0.222
+  mask: 255.255.255.255
+
+interfaces:
+  0/1.101:
+    alias: connection pe-london
+    vlan: 101
+    address: 192.168.101.2
+    mask: 255.255.255.252
+
+
+bgp:
+  asn: 65111
+  neighbor:
+    - {address: 192.168.101.1, remote_as: 1}

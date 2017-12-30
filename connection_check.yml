@@ -1,0 +1,78 @@
+---
+
+- hosts: all
+
+  connection: local
+  gather_facts: 'no'
+
+
+
+  tasks:
+    - name: validate connection from pe-dublin
+      ios_ping:
+        dest: '{{ item }}'
+        state: 'present'
+        provider: "{{ ios_provider }}"
+      when: "'pe-dublin' in inventory_hostname"
+      with_items:
+        - '10.255.0.2'
+        - '10.255.0.3'
+        - '10.255.0.4'
+
+
+    - name: validate connection from pe-london
+      ios_ping:
+        dest: '{{ item }}'
+        state: 'present'
+        provider: "{{ ios_provider }}"
+      when: "'pe-london' in inventory_hostname"
+      with_items:
+        - '10.255.0.1'
+        - '10.255.0.3'
+        - '10.255.0.4'
+
+
+    - name: validate connection from pe-paris
+      ios_ping:
+        dest: '{{ item }}'
+        state: 'present'
+        provider: "{{ ios_provider }}"
+      when: "'pe-paris' in inventory_hostname"
+      with_items:
+        - '10.255.0.1'
+        - '10.255.0.2'
+        - '10.255.0.4'
+
+
+
+
+    - name: validate connection from pe-brussels
+      ios_ping:
+        dest: '{{ item }}'
+        state: 'present'
+        provider: "{{ ios_provider }}"
+      when: "'pe-brussels' in inventory_hostname"
+      with_items:
+        - '10.255.0.1'
+        - '10.255.0.2'
+        - '10.255.0.3'
+
+
+    - name: validate bgp connection from ce-acme1
+      ios_ping:
+        dest: '{{ item }}'
+        state: 'present'
+        provider: "{{ ios_provider }}"
+      when: "'ce-acme1' in inventory_hostname"
+      with_items:
+        - '172.2.0.222'
+
+
+    - name: validate bgp connection from ce-acme2
+      ios_ping:
+        dest: '{{ item }}'
+        state: 'present'
+        provider: "{{ ios_provider }}"
+      when: "'ce-acme2' in inventory_hostname"
+      with_items:
+        - '172.1.0.111'

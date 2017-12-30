@@ -1,0 +1,22 @@
+---
+
+hostname: ce-metrolink
+domain_name: emea.com
+
+celoopback:
+  address: 192.233.0.40
+  mask: 255.255.255.255
+
+
+interfaces:
+  0/1.201:
+    alias: connection pe-paris
+    vlan: 201
+    address: 192.168.201.2
+    mask: 255.255.255.252
+
+
+bgp:
+  asn: 65114
+  neighbor:
+    - {address: 192.168.201.1, remote_as: 1}

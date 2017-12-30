@@ -1,0 +1,33 @@
+[pe]
+pe-dublin ansible_host=192.168.111.138
+pe-london ansible_host=192.168.111.139
+pe-brussels ansible_host=192.168.111.140
+pe-paris ansible_host=192.168.111.141
+p1 ansible_host=192.168.111.142
+p2 ansible_host=192.168.111.143
+
+[ce]
+ce-acme1 ansible_host=192.168.111.134
+ce-acme2 ansible_host=192.168.111.135
+ce-banco ansible_host=192.168.111.136
+ce-metrolink ansible_host=192.168.111.137
+
+[all]
+ce-acme1 ansible_host=192.168.111.134
+ce-acme2 ansible_host=192.168.111.135
+ce-banco ansible_host=192.168.111.136
+ce-metrolink ansible_host=192.168.111.137
+pe-dublin ansible_host=192.168.111.138
+pe-london ansible_host=192.168.111.139
+pe-brussels ansible_host=192.168.111.140
+pe-paris ansible_host=192.168.111.141
+p1 ansible_host=192.168.111.142
+p2 ansible_host=192.168.111.143
+
+
+[all:vars]
+un=cisco
+pw=cisco
+ansible_os=ios
+authorize=yes
+

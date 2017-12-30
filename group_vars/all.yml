@@ -1,0 +1,15 @@
+---
+
+ios_provider:
+  username: "{{ un }}"
+  password: "{{ pw }}"
+  host: "{{ inventory_hostname }}"
+
+snmp: 
+  contact: MURPHY_K
+  location: DUBLIN
+  ro:
+   - public123
+   - ntc123
+  rw:
+   - private123

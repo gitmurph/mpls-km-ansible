@@ -1,0 +1,8 @@
+---
+
+- name: write snmp config
+  ios_config:
+    authorize: yes
+    src: "../templates/snmp.j2"
+    provider: "{{ ios_provider }}"
+

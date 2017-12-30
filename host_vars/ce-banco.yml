@@ -1,0 +1,21 @@
+---
+
+hostname: ce-banco
+domain_name: emea.com
+
+celoopback:
+  address: 192.255.0.1
+  mask: 255.255.255.255
+
+
+interfaces:
+  0/1.200:
+    alias: connection pe-paris
+    vlan: 200
+    address: 192.168.200.2
+    mask: 255.255.255.252
+
+bgp:
+  asn: 65113
+  neighbor:
+    - {address: 192.168.200.1, remote_as: 1}

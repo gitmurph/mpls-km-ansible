@@ -1,0 +1,76 @@
+---
+
+hostname: pe-dublin
+domain_name: emea.com
+
+peloopback:
+  address: 10.255.0.1
+  mask: 255.255.255.255
+
+
+customers:
+  acme:
+    rd: 10.255.0.1:10
+    rt: "10:10"
+
+
+  banco:
+    rd: 10.255.0.1:30
+    rt: "10:30"
+
+
+  corpnet:
+    rd: 10.255.0.1:20
+    rt: "10:20"
+
+
+  metrolink:
+    rd: 10.255.0.1:40
+    rt: "10:40"
+
+
+interfaces:
+  0/1.12:
+    alias: connection p1
+    vlan: 12
+    address: '10.0.255.1'
+    mask: '255.255.255.252'
+
+  0/1.100:
+    alias: connection ce-acme
+    vlan: 100
+    address: '192.168.100.1'
+    mask: '255.255.255.252'
+    intvrf: 'acme'
+
+
+ospf:
+   proc: 1
+   ldp: mpls ldp autoconfig
+   networks:
+    - {network: 0.0.0.0, mask: 255.255.255.255, area: 0}
+
+
+bgp:
+  asn: 1
+  neighbor:
+    - {address: 10.255.0.100, remote_as: 1}
+    - {address: 10.255.0.200, remote_as: 1}
+
+  ups: 
+    - {address: 10.255.0.100, loopback: Loopback0}
+    - {address: 10.255.0.200, loopback: Loopback0}
+
+  ipv4: 
+    - {ce: 192.168.100.2, remote_as: 65111, cvrf: acme}
+  
+  vpnv4:
+    - {address: 10.255.0.100, remote_as: 1}
+    - {address: 10.255.0.200, remote_as: 1}
+  
+
+
+policy: 
+  outbound:
+    - {ce: 192.168.100.2, asover: as-override}
+

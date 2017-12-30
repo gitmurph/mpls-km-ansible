@@ -1,0 +1,27 @@
+{% if peloopback is defined %}
+interface Loopback0
+ ip address {{ peloopback.address }} {{ peloopback.mask }}
+{% endif %}
+{% if celoopback is defined %}
+interface Loopback0
+ ip address {{ celoopback.address }} {{ celoopback.mask }}
+{% endif %}
+{% if interfaces is defined %}
+{% for port, value in interfaces.items() %}
+interface GigabitEthernet{{ port }}
+{% if 'vlan' in value %}
+ encapsulation dot1Q {{ value.vlan }}
+{% endif %}
+{% if 'intvrf' in value %}
+ ip vrf forwarding {{ value.intvrf }}
+{% endif %}
+{% if 'alias' in value %}
+ description {{ value.alias }}
+{% endif %}
+{% if 'address', 'mask' in value %}
+ ip address {{ value.address }} {{ value.mask }}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+

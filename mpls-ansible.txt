@@ -1,0 +1,27 @@
+{% if ospf is defined %}
+ router ospf {{ ospf.proc }}
+ router-id {{ loopback.address }}
+ {% for item in ospf.networks %}
+  network {{ item.network }} mask {{ item.mask }} area {{ item.area }}
+{% endfor %}
+{{ ospf.ldp }}
+!
+{% if bgp is defined %}
+router bgp {{ bgp.asn }}
+ bgp router-id {{ loopback.address }}
+ bgp log-neighbor-changes
+{% for item in bgp.neighbor %}
+ neighbor {{ item.rr }} remote-as {{ item.remote_as }}
+ update-source {{ item.ups }}
+{% endfor %}
+!
+ address-family vpnv4
+{% for item in bgp.neighbor %}
+  neighbor {{ item.rr }} activate
+{% endfor %}
+!
+{% for item in bgp.ipv4 %}
+address-family ipv4 unicast vrf {{ item.cvrf }}
+neighbor {{ item.ce }} remote-as {{ item.remote-as }}
+{% endfor %}
+ exit-address-family
